@@ -18,7 +18,7 @@ const cdThumbAnimate = cdThumb.animate([{ transform: "rotate(360deg)" }], {
 });
 
 cdThumbAnimate.pause();
-fetch("http://localhost:3000/songs")
+fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
     .then(function (response) {
         return response.json();
     })
