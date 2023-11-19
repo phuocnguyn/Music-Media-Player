@@ -26,7 +26,7 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
     .then(function (songsArray) {
         const songList = songsArray.map(function (song) {
             return `
-            <div id="${song.id}" class="song">
+            <div id="song-${song.id}" class="song">
                 <div
                     class="thumb"
                     style="
@@ -64,11 +64,13 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
             audio.src = "./audio/" + songsArray[index].path;
             audio.play();
         }
+        
         audio.ontimeupdate = function () {
             progress.value = Math.floor(
                 (audio.currentTime / audio.duration) * 100
             );
         };
+
         btn_toggle_play.addEventListener("click", function () {
             if (audio.paused) {
                 audio.play();
@@ -82,31 +84,30 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
                 cdThumbAnimate.pause();
             }
         });
-        btn_next.addEventListener("click", function () {
-            if (audio.currentTime < audio.duration) {
-                audio.currentTime += 5;
-            } else {
-                audio.currentTime = 0;
-            }
-        });
+
         progress.onchaged = function () {
             audio.currentTime = (progress.value / 100) * audio.duration;
         };
+
         btn_repeat.addEventListener("click", function () {
             audio.load();
             audio.play();
         });
+
         btn_prev.addEventListener("click", function () {
             if (currentIndexSong == 0) playSong(currentIndexSong);
             else playSong(--currentIndexSong);
         });
+
         btn_next.addEventListener("click", function () {
-            if (currentIndexSong == songsArray.length - 1) playSong(0);
-            else playSong(++currentIndexSong);
+            if (currentIndexSong == songsArray.length - 1) {
+                currentIndexSong = 0;
+                playSong(0);
+            } else playSong(++currentIndexSong);
         });
+
         songsArray.forEach(function (song) {
-            $(`#${song.id}`).onclick = function () {
-                console.log(song.name);
+            $(`#song-${song.id}`).onclick = function () {
                 playSong(
                     songsArray.findIndex(function (e) {
                         return e.name === song.name;
