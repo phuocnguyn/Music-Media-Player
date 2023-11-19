@@ -9,7 +9,7 @@ const btn_prev = $(".btn-prev");
 const btn_play = $(".btn-play");
 const btn_pause = $(".btn-pause ");
 const btn_repeat = $(".btn-repeat");
-const btn_ramdom = $(".btn-ramdom");
+const btn_random = $(".btn-random");
 const progress = $("#progress");
 
 const cdThumbAnimate = cdThumb.animate([{ transform: "rotate(360deg)" }], {
@@ -64,7 +64,7 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
             audio.src = "./audio/" + songsArray[index].path;
             audio.play();
         }
-        
+
         audio.ontimeupdate = function () {
             progress.value = Math.floor(
                 (audio.currentTime / audio.duration) * 100
@@ -98,7 +98,15 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
             if (currentIndexSong == 0) playSong(currentIndexSong);
             else playSong(--currentIndexSong);
         });
-
+        btn_random.addEventListener("click", function () {
+            const indexSongPlaying = currentIndexSong;
+            do {
+                currentIndexSong = Math.floor(
+                    Math.random() * songsArray.length
+                );
+            } while (currentIndexSong == indexSongPlaying);
+            playSong(currentIndexSong);
+        });
         btn_next.addEventListener("click", function () {
             if (currentIndexSong == songsArray.length - 1) {
                 currentIndexSong = 0;
@@ -115,4 +123,9 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
                 );
             };
         });
+
+        audio.onended = function () {
+            btn_next.click();
+        }
+
     });
