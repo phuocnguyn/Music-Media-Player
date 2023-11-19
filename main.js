@@ -26,7 +26,7 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
     .then(function (songsArray) {
         const songList = songsArray.map(function (song) {
             return `
-            <div class="song">
+            <div id="${song.id}" class="song">
                 <div
                     class="thumb"
                     style="
@@ -103,5 +103,15 @@ fetch("https://my-json-server.typicode.com/phuocnguyn/Music-Media-Player/songs")
         btn_next.addEventListener("click", function () {
             if (currentIndexSong == songsArray.length - 1) playSong(0);
             else playSong(++currentIndexSong);
+        });
+        songsArray.forEach(function (song) {
+            $(`#${song.id}`).onclick = function () {
+                console.log(song.name);
+                playSong(
+                    songsArray.findIndex(function (e) {
+                        return e.name === song.name;
+                    })
+                );
+            };
         });
     });
